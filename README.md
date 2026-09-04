@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 교육평가 결과보고서 자동생성기
 
-## Getting Started
+Google Forms로 수집한 교육평가 설문 응답(엑셀) 또는 교육평가 시스템 화면 캡처 이미지를 업로드하면, 문항을 자동으로 인식·집계해서 정해진 형식의 교육평가 결과보고서(Excel)를 바로 만들어주는 업무지원 앱입니다.
 
-First, run the development server:
+자세한 배경과 요구사항은 [PRD.md](PRD.md), 설계는 [DESIGN.md](DESIGN.md)를 참고하세요.
+
+## 주요 기능
+
+- 교육명·교육일자 입력, 응답 엑셀(.xlsx) 또는 캡처 이미지(.jpg/.png) 업로드
+- 객관식 문항 자동 인식·집계 (무응답 제외, 유효 응답자 수 별도 산출)
+- 주관식 문항 제목·응답 원문 그대로 반영 (요약·재해석 없음)
+- 결과보고서 생성 전, 인식 결과(응답자 수·문항 구성)를 화면에서 확인
+- "결과보고서 생성" 버튼으로 정해진 형식의 Excel 파일 즉시 다운로드
+
+## 기술 스택
+
+- Next.js, TypeScript, Tailwind CSS
+- exceljs (엑셀 읽기/쓰기)
+- OpenAI API (Vision) — 캡처 이미지에서 문항·응답을 인식할 때만 사용
+
+## 로컬 실행
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env` 파일에 아래 값이 필요합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+OPENAI_API_KEY=발급받은 OpenAI API 키
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 보안·개인정보
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 업로드한 원본 엑셀·이미지는 서버에 저장하지 않고 요청 처리 중에만 메모리에서 다룹니다.
+- 생성된 결과보고서는 사용자 다운로드 목적으로만 만들며 서버에 누적 보관하지 않습니다.
+- 자세한 내용은 [PRD.md](PRD.md)의 "보안·개인정보 검토" 항목을 참고하세요.
